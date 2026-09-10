@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Copy, Check, Split, Columns2, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { CloudProviderBadge } from './CloudProviderBadge';
 
 interface PolicyDiffViewerProps {
   currentPolicy: string;
@@ -73,8 +74,9 @@ export const PolicyDiffViewer: React.FC<PolicyDiffViewerProps> = ({
       <div className="flex flex-wrap items-center justify-between px-4 py-2.5 bg-slate-900/90 border-b border-slate-800 text-xs">
         <div className="flex items-center gap-2">
           <span className="font-semibold text-slate-200">Policy Diff Engine</span>
-          <span className="px-2 py-0.5 rounded bg-slate-800 text-[11px] text-cyan-400 font-mono">
-            {provider} Native Policy
+          <CloudProviderBadge provider={provider} size="xs" />
+          <span className="px-1.5 py-0.5 rounded bg-slate-800 text-[10px] text-cyan-400 font-mono">
+            Native Format
           </span>
         </div>
 

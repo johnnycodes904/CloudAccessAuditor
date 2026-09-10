@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CloudIdentity } from '../types';
 import { PolicyDiffViewer } from './PolicyDiffViewer';
+import { CloudProviderBadge } from './CloudProviderBadge';
 import {
   X,
   ShieldCheck,
@@ -64,17 +65,7 @@ export const RemediationDrawer: React.FC<RemediationDrawerProps> = ({
         <div className="p-5 border-b border-slate-800 bg-slate-950/90 flex items-start justify-between gap-4">
           <div className="space-y-1.5">
             <div className="flex items-center flex-wrap gap-2">
-              <span
-                className={`px-2 py-0.5 rounded font-semibold text-xs border ${
-                  identity.provider === 'AWS'
-                    ? 'bg-amber-500/10 text-amber-300 border-amber-500/20'
-                    : identity.provider === 'Azure'
-                    ? 'bg-blue-500/10 text-blue-300 border-blue-500/20'
-                    : 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20'
-                }`}
-              >
-                {identity.provider} IAM
-              </span>
+              <CloudProviderBadge provider={identity.provider} size="sm" showFullName={true} />
 
               <span className="flex items-center gap-1 text-xs text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700 font-mono">
                 {identity.identityType === 'Machine' ? (

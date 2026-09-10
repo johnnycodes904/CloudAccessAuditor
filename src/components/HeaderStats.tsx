@@ -1,5 +1,6 @@
 import React from 'react';
 import { CloudIdentity } from '../types';
+import { CloudProviderBadge } from './CloudProviderBadge';
 import { ShieldCheck, ShieldAlert, Cpu, User, AlertTriangle, Layers } from 'lucide-react';
 
 interface HeaderStatsProps {
@@ -48,20 +49,11 @@ export const HeaderStats: React.FC<HeaderStatsProps> = ({ identities }) => {
             </div>
           </div>
 
-          {/* Provider Scope Pills */}
-          <div className="flex items-center gap-2 text-xs">
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-300">
-              <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse"></span>
-              <span className="font-semibold">AWS:</span> {awsCount} identities
-            </div>
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-300">
-              <span className="h-2 w-2 rounded-full bg-blue-400"></span>
-              <span className="font-semibold">Azure:</span> {azureCount} identities
-            </div>
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300">
-              <span className="h-2 w-2 rounded-full bg-emerald-400"></span>
-              <span className="font-semibold">GCP:</span> {gcpCount} identities
-            </div>
+          {/* Provider Scope Pills with Official Badges */}
+          <div className="flex items-center flex-wrap gap-2 text-xs">
+            <CloudProviderBadge provider="AWS" size="md" count={awsCount} />
+            <CloudProviderBadge provider="Azure" size="md" count={azureCount} />
+            <CloudProviderBadge provider="GCP" size="md" count={gcpCount} />
           </div>
         </div>
 
@@ -75,14 +67,12 @@ export const HeaderStats: React.FC<HeaderStatsProps> = ({ identities }) => {
             </div>
             <div className="mt-2 flex items-baseline justify-between">
               <span className="text-2xl sm:text-3xl font-bold text-white tracking-tight">{total}</span>
-              <span className="text-xs font-medium text-slate-400">Across 3 Clouds</span>
+              <span className="text-xs font-medium text-slate-400">Multi-Cloud</span>
             </div>
-            <div className="mt-2 text-[11px] text-slate-400 flex items-center justify-between border-t border-slate-800/60 pt-2">
-              <span>{awsCount} AWS</span>
-              <span>•</span>
-              <span>{azureCount} Azure</span>
-              <span>•</span>
-              <span>{gcpCount} GCP</span>
+            <div className="mt-2 text-[11px] text-slate-400 flex items-center justify-between border-t border-slate-800/60 pt-2 gap-1">
+              <CloudProviderBadge provider="AWS" size="xs" count={awsCount} />
+              <CloudProviderBadge provider="Azure" size="xs" count={azureCount} />
+              <CloudProviderBadge provider="GCP" size="xs" count={gcpCount} />
             </div>
           </div>
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { CloudIdentity } from '../types';
+import { CloudProviderBadge } from './CloudProviderBadge';
 import {
   Cpu,
   User,
@@ -142,28 +143,9 @@ export const IdentityTable: React.FC<IdentityTableProps> = ({
                       isSelected ? 'bg-cyan-950/20 border-l-2 border-cyan-500' : ''
                     } ${item.remediated ? 'opacity-85' : ''}`}
                   >
-                    {/* Provider */}
+                    {/* Provider Badge with Logo */}
                     <td className="py-3.5 px-4 whitespace-nowrap">
-                      <div className="flex items-center gap-2">
-                        {item.provider === 'AWS' && (
-                          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/20 text-amber-300 font-semibold text-[11px]">
-                            <span className="h-2 w-2 rounded-full bg-amber-400"></span>
-                            <span>AWS</span>
-                          </div>
-                        )}
-                        {item.provider === 'Azure' && (
-                          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/20 text-blue-300 font-semibold text-[11px]">
-                            <span className="h-2 w-2 rounded-full bg-blue-400"></span>
-                            <span>Azure</span>
-                          </div>
-                        )}
-                        {item.provider === 'GCP' && (
-                          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 font-semibold text-[11px]">
-                            <span className="h-2 w-2 rounded-full bg-emerald-400"></span>
-                            <span>GCP</span>
-                          </div>
-                        )}
-                      </div>
+                      <CloudProviderBadge provider={item.provider} size="sm" />
                     </td>
 
                     {/* Identity Name & Type */}

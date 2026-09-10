@@ -73,13 +73,18 @@ export const ControlsBar: React.FC<ControlsBarProps> = ({
             onClick={() => onFilterChange({ ...filters, provider: 'AWS' })}
             className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5 ${
               filters.provider === 'AWS'
-                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm shadow-amber-950/40'
                 : 'text-slate-400 hover:text-amber-300 hover:bg-slate-900'
             }`}
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-400"></span>
+            <img
+              src="/assets/aws.svg"
+              alt="AWS"
+              className="h-3.5 w-3.5 object-contain"
+              referrerPolicy="no-referrer"
+            />
             <span>AWS</span>
-            <span className="px-1.5 py-0.2 rounded bg-slate-800 text-[10px] text-amber-300">
+            <span className="px-1.5 py-0.2 rounded bg-slate-800 text-[10px] text-amber-300 font-mono">
               {providerCounts.aws}
             </span>
           </button>
@@ -89,13 +94,18 @@ export const ControlsBar: React.FC<ControlsBarProps> = ({
             onClick={() => onFilterChange({ ...filters, provider: 'Azure' })}
             className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5 ${
               filters.provider === 'Azure'
-                ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+                ? 'bg-blue-500/20 text-blue-300 border border-blue-500/40 shadow-sm shadow-blue-950/40'
                 : 'text-slate-400 hover:text-blue-300 hover:bg-slate-900'
             }`}
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-blue-400"></span>
+            <img
+              src="/assets/azure.svg"
+              alt="Azure"
+              className="h-3.5 w-3.5 object-contain"
+              referrerPolicy="no-referrer"
+            />
             <span>Azure</span>
-            <span className="px-1.5 py-0.2 rounded bg-slate-800 text-[10px] text-blue-300">
+            <span className="px-1.5 py-0.2 rounded bg-slate-800 text-[10px] text-blue-300 font-mono">
               {providerCounts.azure}
             </span>
           </button>
@@ -105,13 +115,18 @@ export const ControlsBar: React.FC<ControlsBarProps> = ({
             onClick={() => onFilterChange({ ...filters, provider: 'GCP' })}
             className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5 ${
               filters.provider === 'GCP'
-                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm shadow-emerald-950/40'
                 : 'text-slate-400 hover:text-emerald-300 hover:bg-slate-900'
             }`}
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+            <img
+              src="/assets/gcp.svg"
+              alt="GCP"
+              className="h-3.5 w-3.5 object-contain"
+              referrerPolicy="no-referrer"
+            />
             <span>GCP</span>
-            <span className="px-1.5 py-0.2 rounded bg-slate-800 text-[10px] text-emerald-300">
+            <span className="px-1.5 py-0.2 rounded bg-slate-800 text-[10px] text-emerald-300 font-mono">
               {providerCounts.gcp}
             </span>
           </button>

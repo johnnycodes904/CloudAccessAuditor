@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { detectProviderSchema, parseAndScoreIngestedJson, SAMPLE_PAYLOADS } from '../utils/riskEngine';
 import { CloudIdentity } from '../types';
+import { CloudProviderBadge } from './CloudProviderBadge';
 
 interface JsonDropzoneModalProps {
   isOpen: boolean;
@@ -144,27 +145,42 @@ export const JsonDropzoneModal: React.FC<JsonDropzoneModalProps> = ({
               <button
                 type="button"
                 onClick={() => loadPreset('awsWildcard')}
-                className="px-3 py-2 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-semibold flex items-center justify-center gap-1.5 transition-all text-left"
+                className="px-3 py-2 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-semibold flex items-center justify-start gap-2 transition-all text-left"
               >
-                <span className="h-2 w-2 rounded-full bg-amber-400"></span>
+                <img
+                  src="/assets/aws.svg"
+                  alt="AWS"
+                  className="h-4 w-4 object-contain"
+                  referrerPolicy="no-referrer"
+                />
                 <span>AWS Wildcard Admin</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => loadPreset('azureOwner')}
-                className="px-3 py-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 border border-blue-500/30 text-xs font-semibold flex items-center justify-center gap-1.5 transition-all text-left"
+                className="px-3 py-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 border border-blue-500/30 text-xs font-semibold flex items-center justify-start gap-2 transition-all text-left"
               >
-                <span className="h-2 w-2 rounded-full bg-blue-400"></span>
+                <img
+                  src="/assets/azure.svg"
+                  alt="Azure"
+                  className="h-4 w-4 object-contain"
+                  referrerPolicy="no-referrer"
+                />
                 <span>Azure Sub Owner</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => loadPreset('gcpProjectOwner')}
-                className="px-3 py-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-semibold flex items-center justify-center gap-1.5 transition-all text-left"
+                className="px-3 py-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-semibold flex items-center justify-start gap-2 transition-all text-left"
               >
-                <span className="h-2 w-2 rounded-full bg-emerald-400"></span>
+                <img
+                  src="/assets/gcp.svg"
+                  alt="GCP"
+                  className="h-4 w-4 object-contain"
+                  referrerPolicy="no-referrer"
+                />
                 <span>GCP Project Owner SA</span>
               </button>
             </div>
@@ -239,11 +255,23 @@ export const JsonDropzoneModal: React.FC<JsonDropzoneModalProps> = ({
                   : 'bg-slate-800/40 border-slate-700 text-slate-400'
               }`}
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <CheckCircle2 className="h-4 w-4 flex-shrink-0" />
                 <div>
-                  <span className="font-bold">Detected Schema: {detectedInfo.provider}</span>
-                  <p className="text-[11px] opacity-80">{detectedInfo.confidence}</p>
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold">Detected Schema:</span>
+                    {detectedInfo.provider === 'AWS' ||
+                    detectedInfo.provider === 'Azure' ||
+                    detectedInfo.provider === 'GCP' ? (
+                      <CloudProviderBadge
+                        provider={detectedInfo.provider as 'AWS' | 'Azure' | 'GCP'}
+                        size="xs"
+                      />
+                    ) : (
+                      <span className="font-bold text-white">{detectedInfo.provider}</span>
+                    )}
+                  </div>
+                  <p className="text-[11px] opacity-80 mt-0.5">{detectedInfo.confidence}</p>
                 </div>
               </div>
               <span className="px-2 py-0.5 rounded bg-slate-900 text-[10px] font-mono border border-slate-700">
