@@ -1,0 +1,6 @@
+{
+  "name": "CloudAccessAuditor",
+  "description": "Multi-cloud CIEM access governance dashboard across AWS, Azure, and GCP with risk scoring, compliance mapping, and least-privilege remediations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
