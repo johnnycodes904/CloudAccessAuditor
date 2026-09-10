@@ -1,0 +1,74 @@
+[
+  {
+    "id": "/subscriptions/c45b8492-4f30-4e4b-9cf7-4f621ad75390/providers/Microsoft.Authorization/roleAssignments/8a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c5d",
+    "name": "8a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c5d",
+    "type": "Microsoft.Authorization/roleAssignments",
+    "properties": {
+      "roleDefinitionId": "/subscriptions/c45b8492-4f30-4e4b-9cf7-4f621ad75390/providers/Microsoft.Authorization/roleDefinitions/8e3af657-a8ff-443c-a75c-2fe8c4bcb635",
+      "roleDefinitionName": "Owner",
+      "principalId": "c891f930-b9df-416a-932f-488f57fa2391",
+      "principalName": "github-actions-deployer",
+      "principalType": "ServicePrincipal",
+      "scope": "/subscriptions/c45b8492-4f30-4e4b-9cf7-4f621ad75390",
+      "createdOn": "2024-03-15T14:22:18.0000000Z",
+      "updatedOn": "2024-03-15T14:22:18.0000000Z",
+      "description": "Deployment CI runner identity",
+      "condition": null,
+      "conditionVersion": null
+    }
+  },
+  {
+    "id": "/subscriptions/c45b8492-4f30-4e4b-9cf7-4f621ad75390/resourceGroups/rg-prod-payments/providers/Microsoft.Authorization/roleAssignments/9b2c3d4e-5f6a-7b8c-9d0e-1f2a3b4c5d6e",
+    "name": "9b2c3d4e-5f6a-7b8c-9d0e-1f2a3b4c5d6e",
+    "type": "Microsoft.Authorization/roleAssignments",
+    "properties": {
+      "roleDefinitionId": "/subscriptions/c45b8492-4f30-4e4b-9cf7-4f621ad75390/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c",
+      "roleDefinitionName": "Contributor",
+      "principalId": "e123a456-789b-4cd0-ef12-3456789abcde",
+      "principalName": "alex.chen@acme-corp.com",
+      "principalType": "User",
+      "scope": "/subscriptions/c45b8492-4f30-4e4b-9cf7-4f621ad75390/resourceGroups/rg-prod-payments",
+      "createdOn": "2023-11-04T09:12:44.0000000Z",
+      "updatedOn": "2023-11-04T09:12:44.0000000Z",
+      "description": "Lead engineer workload management",
+      "condition": null,
+      "conditionVersion": null
+    }
+  },
+  {
+    "id": "/subscriptions/c45b8492-4f30-4e4b-9cf7-4f621ad75390/resourceGroups/rg-core-networking/providers/Microsoft.Authorization/roleAssignments/0c3d4e5f-6a7b-8c9d-0e1f-2a3b4c5d6e7f",
+    "name": "0c3d4e5f-6a7b-8c9d-0e1f-2a3b4c5d6e7f",
+    "type": "Microsoft.Authorization/roleAssignments",
+    "properties": {
+      "roleDefinitionId": "/subscriptions/c45b8492-4f30-4e4b-9cf7-4f621ad75390/providers/Microsoft.Authorization/roleDefinitions/f91a9988-1234-5678-9abc-def012345678",
+      "roleDefinitionName": "Custom-KeyVault-FullAccess",
+      "principalId": "f789e012-345a-678b-90cd-ef1234567890",
+      "principalName": "legacy-app-secret-sync",
+      "principalType": "ServicePrincipal",
+      "scope": "/subscriptions/c45b8492-4f30-4e4b-9cf7-4f621ad75390/resourceGroups/rg-core-networking/providers/Microsoft.KeyVault/vaults/kv-prod-core",
+      "createdOn": "2024-01-20T18:05:00.0000000Z",
+      "updatedOn": "2024-01-20T18:05:00.0000000Z",
+      "description": "Legacy sync daemon with unrestricted secret/key operations",
+      "condition": null,
+      "conditionVersion": null
+    }
+  },
+  {
+    "id": "/subscriptions/c45b8492-4f30-4e4b-9cf7-4f621ad75390/providers/Microsoft.Authorization/roleAssignments/1d4e5f6a-7b8c-9d0e-1f2a-3b4c5d6e7f8a",
+    "name": "1d4e5f6a-7b8c-9d0e-1f2a-3b4c5d6e7f8a",
+    "type": "Microsoft.Authorization/roleAssignments",
+    "properties": {
+      "roleDefinitionId": "/subscriptions/c45b8492-4f30-4e4b-9cf7-4f621ad75390/providers/Microsoft.Authorization/roleDefinitions/acdd72a7-3385-48ef-bd42-f606fba81ae7",
+      "roleDefinitionName": "Reader",
+      "principalId": "d456e789-012a-345b-67cd-ef8901234567",
+      "principalName": "auditor.readonly@acme-corp.com",
+      "principalType": "User",
+      "scope": "/subscriptions/c45b8492-4f30-4e4b-9cf7-4f621ad75390",
+      "createdOn": "2025-02-10T11:45:30.0000000Z",
+      "updatedOn": "2025-02-10T11:45:30.0000000Z",
+      "description": "External compliance reader role",
+      "condition": null,
+      "conditionVersion": null
+    }
+  }
+]
