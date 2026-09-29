@@ -59,9 +59,21 @@ export const IdentityTable: React.FC<IdentityTableProps> = ({
 
   const copyScope = (e: React.MouseEvent, scope: string) => {
     e.stopPropagation();
-    navigator.clipboard.writeText(scope);
-    setCopiedScope(scope);
-    setTimeout(() => setCopiedScope(null), 1500);
+    if (!navigator?.clipboard?.writeText) return;
+    navigator.clipboard
+      .writeText(scope)
+      .then(() => {
+        setCopiedScope(scope);
+        setTimeout(() => setCopiedScope(null), 1500);
+      })
+      .catch((err) => {
+        console.warn('Clipboard write failed:', err);
+      });
+  };
+
+  const getSortAria = (field: SortField): 'ascending' | 'descending' | 'none' => {
+    if (sortField !== field) return 'none';
+    return sortDirection === 'asc' ? 'ascending' : 'descending';
   };
 
   return (
@@ -71,6 +83,8 @@ export const IdentityTable: React.FC<IdentityTableProps> = ({
           <thead>
             <tr className="bg-slate-950/80 border-b border-slate-800 text-slate-400 font-semibold tracking-wider uppercase text-[11px]">
               <th
+                scope="col"
+                aria-sort={getSortAria('provider')}
                 onClick={() => handleSort('provider')}
                 className="py-3 px-4 cursor-pointer hover:text-white transition-colors"
               >
@@ -81,6 +95,8 @@ export const IdentityTable: React.FC<IdentityTableProps> = ({
               </th>
 
               <th
+                scope="col"
+                aria-sort={getSortAria('name')}
                 onClick={() => handleSort('name')}
                 className="py-3 px-4 cursor-pointer hover:text-white transition-colors"
               >
@@ -90,9 +106,11 @@ export const IdentityTable: React.FC<IdentityTableProps> = ({
                 </div>
               </th>
 
-              <th className="py-3 px-4">Account / Project Scope</th>
+              <th scope="col" className="py-3 px-4">Account / Project Scope</th>
 
               <th
+                scope="col"
+                aria-sort={getSortAria('riskScore')}
                 onClick={() => handleSort('riskScore')}
                 className="py-3 px-4 cursor-pointer hover:text-white transition-colors"
               >
@@ -103,6 +121,8 @@ export const IdentityTable: React.FC<IdentityTableProps> = ({
               </th>
 
               <th
+                scope="col"
+                aria-sort={getSortAria('violations')}
                 onClick={() => handleSort('violations')}
                 className="py-3 px-4 cursor-pointer hover:text-white transition-colors"
               >
@@ -112,9 +132,9 @@ export const IdentityTable: React.FC<IdentityTableProps> = ({
                 </div>
               </th>
 
-              <th className="py-3 px-4">Compliance Tags</th>
+              <th scope="col" className="py-3 px-4">Compliance Tags</th>
 
-              <th className="py-3 px-4 text-right">Action</th>
+              <th scope="col" className="py-3 px-4 text-right">Action</th>
             </tr>
           </thead>
 
@@ -187,6 +207,7 @@ export const IdentityTable: React.FC<IdentityTableProps> = ({
                           onClick={(e) => copyScope(e, item.scope)}
                           className="p-1 rounded hover:bg-slate-800 text-slate-500 hover:text-slate-300 transition-colors"
                           title="Copy Scope ID"
+                          aria-label={`Copy scope for ${item.name}`}
                         >
                           {copiedScope === item.scope ? (
                             <Check className="h-3 w-3 text-emerald-400" />

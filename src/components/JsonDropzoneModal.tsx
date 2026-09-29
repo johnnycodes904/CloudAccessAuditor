@@ -49,6 +49,18 @@ export const JsonDropzoneModal: React.FC<JsonDropzoneModalProps> = ({
     }
   }, [jsonText]);
 
+  // Close on Escape key
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handleDrag = (e: React.DragEvent) => {
@@ -78,10 +90,18 @@ export const JsonDropzoneModal: React.FC<JsonDropzoneModalProps> = ({
   };
 
   const processFile = (file: File) => {
+    // Limit to 5MB to prevent main thread blocking
+    if (file.size > 5 * 1024 * 1024) {
+      setParseError('File size exceeds 5MB limit. Please provide a scoped policy export.');
+      return;
+    }
     const reader = new FileReader();
     reader.onload = (event) => {
       const content = event.target?.result as string;
       setJsonText(content);
+    };
+    reader.onerror = () => {
+      setParseError('Failed to read file from disk.');
     };
     reader.readAsText(file);
   };
@@ -102,13 +122,19 @@ export const JsonDropzoneModal: React.FC<JsonDropzoneModalProps> = ({
       } else {
         setParseError(result.message || 'Failed to ingest policy schema');
       }
-    } catch (err: any) {
-      setParseError(`JSON Syntax Error: ${err?.message || 'Invalid JSON'}`);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Invalid JSON';
+      setParseError(`JSON Syntax Error: ${msg}`);
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="dropzone-modal-title"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200"
+    >
       <div className="w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
         <div className="p-4 sm:p-5 border-b border-slate-800 bg-slate-950/90 flex items-center justify-between">
@@ -117,7 +143,7 @@ export const JsonDropzoneModal: React.FC<JsonDropzoneModalProps> = ({
               <UploadCloud className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white">Ingest Cloud Access Configuration</h3>
+              <h3 id="dropzone-modal-title" className="text-base font-bold text-white">Ingest Cloud Access Configuration</h3>
               <p className="text-xs text-slate-400">
                 Drop or paste raw JSON policies (AWS IAM, Azure RBAC, or GCP Cloud IAM)
               </p>
@@ -126,6 +152,7 @@ export const JsonDropzoneModal: React.FC<JsonDropzoneModalProps> = ({
           <button
             type="button"
             onClick={onClose}
+            aria-label="Close dialog"
             className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
           >
             <X className="h-5 w-5" />

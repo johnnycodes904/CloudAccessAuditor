@@ -175,11 +175,13 @@ export const ControlsBar: React.FC<ControlsBarProps> = ({
             value={filters.searchQuery}
             onChange={(e) => onFilterChange({ ...filters, searchQuery: e.target.value })}
             placeholder="Search by identity name, scope, or role..."
+            aria-label="Search identities by name, scope, or role"
             className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-9 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500"
           />
           {filters.searchQuery && (
             <button
               onClick={() => onFilterChange({ ...filters, searchQuery: '' })}
+              aria-label="Clear search query"
               className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
             >
               <X className="h-3.5 w-3.5" />
@@ -192,6 +194,7 @@ export const ControlsBar: React.FC<ControlsBarProps> = ({
           <select
             value={filters.identityType}
             onChange={(e) => onFilterChange({ ...filters, identityType: e.target.value as 'All' | IdentityType })}
+            aria-label="Filter by identity type"
             className="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:ring-1 focus:ring-cyan-500"
           >
             <option value="All">Type: All (Human & Machine)</option>
@@ -205,6 +208,7 @@ export const ControlsBar: React.FC<ControlsBarProps> = ({
           <select
             value={filters.riskLevel}
             onChange={(e) => onFilterChange({ ...filters, riskLevel: e.target.value as 'All' | RiskLevel })}
+            aria-label="Filter by risk level"
             className="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:ring-1 focus:ring-cyan-500"
           >
             <option value="All">Risk: All Levels</option>
@@ -220,6 +224,7 @@ export const ControlsBar: React.FC<ControlsBarProps> = ({
           <select
             value={filters.complianceFramework}
             onChange={(e) => onFilterChange({ ...filters, complianceFramework: e.target.value as any })}
+            aria-label="Filter by compliance framework"
             className="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:ring-1 focus:ring-cyan-500"
           >
             <option value="All">Framework: All Standards</option>
@@ -233,6 +238,7 @@ export const ControlsBar: React.FC<ControlsBarProps> = ({
           <select
             value={filters.status}
             onChange={(e) => onFilterChange({ ...filters, status: e.target.value as any })}
+            aria-label="Filter by status"
             className="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:ring-1 focus:ring-cyan-500"
           >
             <option value="All">Status: All</option>
@@ -244,6 +250,7 @@ export const ControlsBar: React.FC<ControlsBarProps> = ({
             <button
               onClick={resetFilters}
               title="Reset all filters"
+              aria-label="Reset all filters"
               className="p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition-colors flex-shrink-0"
             >
               <X className="h-4 w-4" />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CloudIdentity } from '../types';
 import { PolicyDiffViewer } from './PolicyDiffViewer';
 import { CloudProviderBadge } from './CloudProviderBadge';
@@ -16,8 +16,7 @@ import {
   RotateCcw,
   Sparkles,
   Layers,
-  ArrowRight,
-  ExternalLink
+  Code
 } from 'lucide-react';
 
 interface RemediationDrawerProps {
@@ -39,19 +38,45 @@ export const RemediationDrawer: React.FC<RemediationDrawerProps> = ({
   const [copiedCli, setCopiedCli] = useState(false);
   const [copiedTf, setCopiedTf] = useState(false);
 
+  // Close on Escape key
+  useEffect(() => {
+    if (!identity) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [identity, onClose]);
+
   if (!identity) return null;
 
   const copyCli = () => {
-    navigator.clipboard.writeText(identity.remediationCommand);
-    setCopiedCli(true);
-    setTimeout(() => setCopiedCli(false), 2000);
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard
+        .writeText(identity.remediationCommand)
+        .then(() => {
+          setCopiedCli(true);
+          setTimeout(() => setCopiedCli(false), 2000);
+        })
+        .catch((err) => {
+          console.warn('Clipboard write failed:', err);
+        });
+    }
   };
 
   const copyTf = () => {
-    if (identity.remediationTerraform) {
-      navigator.clipboard.writeText(identity.remediationTerraform);
-      setCopiedTf(true);
-      setTimeout(() => setCopiedTf(false), 2000);
+    if (identity.remediationTerraform && navigator?.clipboard?.writeText) {
+      navigator.clipboard
+        .writeText(identity.remediationTerraform)
+        .then(() => {
+          setCopiedTf(true);
+          setTimeout(() => setCopiedTf(false), 2000);
+        })
+        .catch((err) => {
+          console.warn('Clipboard write failed:', err);
+        });
     }
   };
 
@@ -59,7 +84,12 @@ export const RemediationDrawer: React.FC<RemediationDrawerProps> = ({
   const effectiveLevel = identity.remediated ? 'Low' : identity.riskLevel;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-end bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="drawer-identity-title"
+      className="fixed inset-0 z-50 flex items-center justify-end bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200"
+    >
       <div className="w-full max-w-4xl h-full bg-slate-900 border-l border-slate-800 shadow-2xl flex flex-col overflow-hidden">
         {/* Modal/Drawer Top Bar */}
         <div className="p-5 border-b border-slate-800 bg-slate-950/90 flex items-start justify-between gap-4">
@@ -82,7 +112,7 @@ export const RemediationDrawer: React.FC<RemediationDrawerProps> = ({
             </div>
 
             <div className="flex items-center gap-3">
-              <h2 className="text-lg font-bold text-white tracking-tight font-mono">{identity.name}</h2>
+              <h2 id="drawer-identity-title" className="text-lg font-bold text-white tracking-tight font-mono">{identity.name}</h2>
               {identity.remediated ? (
                 <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-semibold flex items-center gap-1">
                   <ShieldCheck className="h-3.5 w-3.5" /> Remediated
@@ -354,7 +384,7 @@ export const RemediationDrawer: React.FC<RemediationDrawerProps> = ({
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-                      <CodeIcon className="h-3.5 w-3.5 text-purple-400" />
+                      <Code className="h-3.5 w-3.5 text-purple-400" />
                       <span>Terraform / Infrastructure-as-Code (IaC) Scoping</span>
                     </h4>
                     <button
@@ -453,20 +483,3 @@ export const RemediationDrawer: React.FC<RemediationDrawerProps> = ({
     </div>
   );
 };
-
-function CodeIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      viewBox="0 0 24 24"
-    >
-      <polyline points="16 18 22 12 16 6" />
-      <polyline points="8 6 2 12 8 18" />
-    </svg>
-  );
-}

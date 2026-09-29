@@ -20,14 +20,21 @@ export const PolicyDiffViewer: React.FC<PolicyDiffViewerProps> = ({
   const [copiedRecommended, setCopiedRecommended] = useState(false);
 
   const copyToClipboard = (text: string, isRecommended: boolean) => {
-    navigator.clipboard.writeText(text);
-    if (isRecommended) {
-      setCopiedRecommended(true);
-      setTimeout(() => setCopiedRecommended(false), 2000);
-    } else {
-      setCopiedCurrent(true);
-      setTimeout(() => setCopiedCurrent(false), 2000);
-    }
+    if (!navigator?.clipboard?.writeText) return;
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        if (isRecommended) {
+          setCopiedRecommended(true);
+          setTimeout(() => setCopiedRecommended(false), 2000);
+        } else {
+          setCopiedCurrent(true);
+          setTimeout(() => setCopiedCurrent(false), 2000);
+        }
+      })
+      .catch((err) => {
+        console.warn('Clipboard write failed:', err);
+      });
   };
 
   const currentLines = currentPolicy.split('\n');

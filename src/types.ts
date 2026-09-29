@@ -51,6 +51,8 @@ export interface CloudIdentity {
   remediationCommand: string;
   remediationTerraform?: string;
   remediated: boolean;
+  originalRiskScore?: number;
+  originalRiskLevel?: RiskLevel;
   blastRadiusDetails: BlastRadiusDetails;
 }
 

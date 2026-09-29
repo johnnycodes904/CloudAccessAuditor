@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { CloudIdentity, FilterState } from './types';
 import { INITIAL_IDENTITIES } from './data/mockIdentities';
+import { calculateRiskLevel } from './utils/riskEngine';
 import { HeaderStats } from './components/HeaderStats';
 import { ControlsBar } from './components/ControlsBar';
 import { IdentityTable } from './components/IdentityTable';
@@ -107,6 +108,8 @@ export default function App() {
         if (item.id === identityId) {
           return {
             ...item,
+            originalRiskScore: item.originalRiskScore ?? item.riskScore,
+            originalRiskLevel: item.originalRiskLevel ?? item.riskLevel,
             remediated: true,
             riskScore: 12,
             riskLevel: 'Low'
@@ -117,7 +120,18 @@ export default function App() {
     );
 
     if (selectedIdentity && selectedIdentity.id === identityId) {
-      setSelectedIdentity((prev) => (prev ? { ...prev, remediated: true, riskScore: 12, riskLevel: 'Low' } : null));
+      setSelectedIdentity((prev) =>
+        prev
+          ? {
+              ...prev,
+              originalRiskScore: prev.originalRiskScore ?? prev.riskScore,
+              originalRiskLevel: prev.originalRiskLevel ?? prev.riskLevel,
+              remediated: true,
+              riskScore: 12,
+              riskLevel: 'Low'
+            }
+          : null
+      );
     }
 
     showToast(`Successfully remediated "${selectedIdentity?.name || 'Identity'}". Risk score reduced to 12 (Low).`);
@@ -128,11 +142,13 @@ export default function App() {
       prev.map((item) => {
         if (item.id === identityId) {
           const original = INITIAL_IDENTITIES.find((orig) => orig.id === identityId);
+          const restoredScore = original ? original.riskScore : (item.originalRiskScore ?? 80);
+          const restoredLevel = original ? original.riskLevel : (item.originalRiskLevel ?? calculateRiskLevel(restoredScore));
           return {
             ...item,
             remediated: false,
-            riskScore: original ? original.riskScore : 80,
-            riskLevel: original ? original.riskLevel : 'Critical'
+            riskScore: restoredScore,
+            riskLevel: restoredLevel
           };
         }
         return item;
@@ -141,13 +157,15 @@ export default function App() {
 
     if (selectedIdentity && selectedIdentity.id === identityId) {
       const original = INITIAL_IDENTITIES.find((orig) => orig.id === identityId);
+      const restoredScore = original ? original.riskScore : (selectedIdentity.originalRiskScore ?? 80);
+      const restoredLevel = original ? original.riskLevel : (selectedIdentity.originalRiskLevel ?? calculateRiskLevel(restoredScore));
       setSelectedIdentity((prev) =>
         prev
           ? {
               ...prev,
               remediated: false,
-              riskScore: original ? original.riskScore : 80,
-              riskLevel: original ? original.riskLevel : 'Critical'
+              riskScore: restoredScore,
+              riskLevel: restoredLevel
             }
           : null
       );

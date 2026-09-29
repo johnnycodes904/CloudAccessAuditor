@@ -1,5 +1,26 @@
 import { CloudIdentity } from '../types';
 
+/**
+ * Sanitizes a string value for safe CSV output, preventing Formula Injection (CWE-1236).
+ * If a value starts with formula characters (=, +, -, @, \t, \r), it prepends a single quote.
+ * Quotes are escaped by doubling them according to RFC 4180.
+ */
+function sanitizeCsvValue(val: unknown): string {
+  if (val === null || val === undefined) return '""';
+  const str = String(val);
+  const trimmed = str.trimStart();
+  // Prevent Excel / Sheets formula execution on untrusted strings
+  const isFormula = /^[=+\-@\t\r]/.test(trimmed);
+  const safeStr = isFormula ? `'${str}` : str;
+  return `"${safeStr.replace(/"/g, '""')}"`;
+}
+
+/**
+ * Exports a list of CloudIdentities to an RFC 4180 compliant CSV file with formula sanitization.
+ *
+ * @param identities - List of cloud identities to export
+ * @param filename - Target download file name
+ */
 export function exportIdentitiesToCsv(identities: CloudIdentity[], filename = 'cloud-access-auditor-evidence.csv') {
   const headers = [
     'Identity Name',
@@ -43,21 +64,21 @@ export function exportIdentitiesToCsv(identities: CloudIdentity[], filename = 'c
     const credAge = item.keyAgeDays ? `${item.keyAgeDays}d key` : item.secretExpiryDays ? `${item.secretExpiryDays}d secret` : 'N/A';
 
     return [
-      `"${item.name.replace(/"/g, '""')}"`,
-      `"${item.provider}"`,
-      `"${item.identityType}"`,
-      `"${item.scope.replace(/"/g, '""')}"`,
+      sanitizeCsvValue(item.name),
+      sanitizeCsvValue(item.provider),
+      sanitizeCsvValue(item.identityType),
+      sanitizeCsvValue(item.scope),
       item.riskScore,
-      `"${item.riskLevel}"`,
-      item.remediated ? '"Remediated"' : item.violations.length > 0 ? '"Over-Privileged"' : '"Compliant"',
+      sanitizeCsvValue(item.riskLevel),
+      sanitizeCsvValue(item.remediated ? 'Remediated' : item.violations.length > 0 ? 'Over-Privileged' : 'Compliant'),
       item.violations.length,
-      `"${violationCodes.replace(/"/g, '""')}"`,
-      `"${soc2Tags.replace(/"/g, '""')}"`,
-      `"${cisTags.replace(/"/g, '""')}"`,
-      item.mfaEnabled === undefined ? '"N/A"' : item.mfaEnabled ? '"Yes"' : '"No"',
-      `"${credAge}"`,
-      `"${item.lastActive}"`,
-      `"${nowIso}"`
+      sanitizeCsvValue(violationCodes),
+      sanitizeCsvValue(soc2Tags),
+      sanitizeCsvValue(cisTags),
+      sanitizeCsvValue(item.mfaEnabled === undefined ? 'N/A' : item.mfaEnabled ? 'Yes' : 'No'),
+      sanitizeCsvValue(credAge),
+      sanitizeCsvValue(item.lastActive),
+      sanitizeCsvValue(nowIso)
     ].join(',');
   });
 
@@ -65,6 +86,12 @@ export function exportIdentitiesToCsv(identities: CloudIdentity[], filename = 'c
   downloadBlob(csvContent, filename, 'text/csv;charset=utf-8;');
 }
 
+/**
+ * Exports a structured JSON audit evidence file for GRC reporting and compliance archives.
+ *
+ * @param identities - List of cloud identities to export
+ * @param filename - Target download file name
+ */
 export function exportIdentitiesToJson(identities: CloudIdentity[], filename = 'cloud-access-auditor-report.json') {
   const payload = {
     auditReport: {
@@ -82,6 +109,10 @@ export function exportIdentitiesToJson(identities: CloudIdentity[], filename = '
   downloadBlob(jsonStr, filename, 'application/json;charset=utf-8;');
 }
 
+/**
+ * Triggers a browser file download using Blob and temporarily attached anchor element.
+ * Defers URL.revokeObjectURL to avoid race condition where download stream is aborted prematurely.
+ */
 function downloadBlob(content: string, filename: string, mimeType: string) {
   const blob = new Blob([content], { type: mimeType });
   const url = URL.createObjectURL(blob);
@@ -92,5 +123,8 @@ function downloadBlob(content: string, filename: string, mimeType: string) {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-  URL.revokeObjectURL(url);
+  // Defer revocation to prevent early cancellation in WebKit / Chromium
+  setTimeout(() => {
+    URL.revokeObjectURL(url);
+  }, 200);
 }
