@@ -1,3 +1,10 @@
+/**
+ * CloudAccessAuditor CIEM
+ * Copyright (c) 2026. All Rights Reserved.
+ * PROPRIETARY AND CONFIDENTIAL.
+ * Unauthorized reproduction, copying, distribution, or commercial exploitation is strictly prohibited.
+ */
+
 import React, { useState, useMemo } from 'react';
 import { CloudIdentity, FilterState } from './types';
 import { INITIAL_IDENTITIES } from './data/mockIdentities';
@@ -250,7 +257,9 @@ export default function App() {
             <ShieldCheck className="h-4 w-4 text-cyan-500" />
             <span>CloudAccessAuditor CIEM v2.4</span>
             <span className="text-slate-600">|</span>
-            <span>Zero-Trust Entitlement Governance</span>
+            <span className="text-slate-400">Proprietary & Confidential</span>
+            <span className="text-slate-600">|</span>
+            <span>All Rights Reserved</span>
           </span>
           <span className="text-[11px] text-slate-500">
             Compliant with SOC 2 CC6.1–3 • CIS AWS 3.0 • CIS Azure 2.1 • CIS GCP 3.0

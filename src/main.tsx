@@ -1,3 +1,9 @@
+/**
+ * CloudAccessAuditor CIEM
+ * Copyright (c) 2026. All Rights Reserved.
+ * PROPRIETARY AND CONFIDENTIAL.
+ */
+
 import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 import App from './App.tsx';
